@@ -6,6 +6,7 @@ const iwt = require("jsonwebtoken");
 const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
+const jwt = require('jsonwebtoken');
 
 app.use(express.json());
 app.use(cors());
@@ -22,7 +23,47 @@ mongoose.connect('mongodb://127.0.0.1:27017/my_db')
     .catch((err) => {
         console.error('Error connecting to MongoDB:', err);
     });
+//login
+const JWT_SECRET = "secret"; 
+const ADMIN_USERNAME = "admin"; 
+const ADMIN_PASSWORD = "admin123456"; 
 
+app.post("/login", (req, res) => {
+    try {
+      const { username, password } = req.body;
+  
+      if (!username || !password) {
+        return res.status(400).json({
+          success: false,
+          message: "Username hoặc password không được để trống!",
+        });
+      }
+  
+      console.log("Received data - username:", username, "password:", password);
+  
+      if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+        const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: "1h" });
+        return res.json({
+          success: true,
+          token,
+        });
+      } else {
+        return res.status(401).json({
+          success: false,
+          message: "Tên đăng nhập hoặc mật khẩu không đúng!",
+        });
+      }
+    } catch (error) {
+      console.error("Error in login endpoint:", error); 
+      res.status(500).json({
+        success: false,
+        message: "Đã xảy ra lỗi ở phía server!",
+      });
+    }
+  });
+  
+
+  
 //img
 const storage = multer.diskStorage({
     destination: './upload/images',
@@ -128,7 +169,30 @@ app.get('/products', async (req, res) => {
     res.json(products);
   });
   
-
+  app.post('/updateproduct', async (req, res) => {
+    const { id, name, image, category, new_price, old_price } = req.body;
+    
+    const product = await Product.findOne({ id });
+    if (product) {
+      product.name = name;
+      product.image = image;
+      product.category = category;
+      product.new_price = new_price;
+      product.old_price = old_price;
+  
+      await product.save();
+      res.json({
+        success: true,
+        message: "Sản phẩm đã được cập nhật.",
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "Sản phẩm không tìm thấy.",
+      });
+    }
+  });
+  
 app.listen(port, (error) => {
     if (!error) {
         console.log("Server is running on port " + port);

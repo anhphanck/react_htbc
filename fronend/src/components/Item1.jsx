@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom'
 
-const Item = ({id, name, image, old_price, new_price}) => {
+const Item1 = ({id, name, image, old_price, new_price}) => {
   return (
     <div className='rounded-xl overflow-hidden shadow-lg mt-[4cm]'>
         <div>
@@ -11,18 +11,18 @@ const Item = ({id, name, image, old_price, new_price}) => {
         <div className='p-4 overflow-hidden text-center'>
             <h4 className='my-[6px] medium-16 line-clamp-2 text-gray-30'>{name}</h4>
             <div className='flex gap-5 justify-center'>
-                <div className='bold-16'>{new_price}.000 đồng</div>
+                <div className='bold-16'>{new_price}.000 đồng/con</div>
                 <div className='text-secondary bold-16 line-through '>{old_price}.000 đồng</div>
             </div>
         </div>
     </div> 
   )
 }
-Item.propTypes = {
+Item1.propTypes = {
   id: PropTypes.number.isRequired,         
   name: PropTypes.string.isRequired,        
   image: PropTypes.string.isRequired,      
   old_price: PropTypes.string.isRequired,   
   new_price: PropTypes.string.isRequired,   
 };
-export default Item
+export default Item1

@@ -24,7 +24,7 @@
 
 // export default ConGiong;
 import { useEffect, useState } from 'react';
-import Item from '../components/Item';
+import Item1 from '../components/Item1';
 
 const ConGiong = () => {
   const [productsGiong, setProductsGiong] = useState([]);
@@ -41,7 +41,7 @@ const ConGiong = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {productsGiong.map((product) => (
-        <Item
+        <Item1
           key={product.id}
           id={product.id}
           name={product.name}
